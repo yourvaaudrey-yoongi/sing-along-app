@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎵 Sing Along! Music Memory Game</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Georgia, 'Times New Roman', serif;
+      background: linear-gradient(135deg, #1a0533 0%, #2d1b69 50%, #1a0533 100%);
+      min-height: 100vh;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    header {
+      width: 100%;
+      background: rgba(0,0,0,0.4);
+      padding: 18px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 3px solid #f0c040;
+    }
+    header h1 { font-size: 2.4rem; color: #f0c040; letter-spacing: 2px; text-shadow: 0 0 20px rgba(240,192,64,0.5); }
+    #score-display { font-size: 1.6rem; color: #f0c040; background: rgba(240,192,64,0.15); border: 2px solid #f0c040; border-radius: 12px; padding: 8px 24px; }
+
+    main { width: 100%; max-width: 1100px; padding: 30px 20px; display: flex; flex-direction: column; align-items: center; gap: 30px; }
+
+    /* HOME */
+    #home-screen { text-align: center; width: 100%; }
+    #home-screen h2 { font-size: 3rem; color: #f0c040; margin-bottom: 12px; text-shadow: 0 0 30px rgba(240,192,64,0.6); }
+    #home-screen p { font-size: 1.6rem; color: #ddd; margin-bottom: 40px; }
+
+    .mode-cards { display: flex; gap: 24px; flex-wrap: wrap; justify-content: center; margin-bottom: 40px; }
+    .mode-card { background: rgba(255,255,255,0.08); border: 3px solid #f0c040; border-radius: 20px; padding: 36px 30px; width: 300px; cursor: pointer; transition: all 0.25s; text-align: center; }
+    .mode-card:hover { background: rgba(240,192,64,0.2); transform: translateY(-6px); box-shadow: 0 12px 40px rgba(240,192,64,0.3); }
+    .mode-card .icon { font-size: 3.5rem; margin-bottom: 16px; }
+    .mode-card h3 { font-size: 1.8rem; color: #f0c040; margin-bottom: 10px; }
+    .mode-card p { font-size: 1.15rem; color: #ccc; line-height: 1.5; }
+
+    /* SONG SEARCH BOX */
+    .search-box {
+      background: rgba(255,255,255,0.07);
+      border: 3px solid #f0c040;
+      border-radius: 20px;
+      padding: 30px 36px;
+      width: 100%;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .search-box h3 { font-size: 1.6rem; color: #f0c040; margin-bottom: 16px; text-align: center; }
+    .search-row { display: flex; gap: 12px; flex-wrap: wrap; }
+    .search-row input {
+      flex: 1;
+      min-width: 200px;
+      font-family: Georgia, serif;
+      font-size: 1.4rem;
+      padding: 14px 20px;
+      border-radius: 12px;
+      border: 2px solid #f0c040;
+      background: rgba(0,0,0,0.4);
+      color: #fff;
+      outline: none;
+    }
+    .search-row input::placeholder { color: #888; }
+    .search-row input:focus { border-color: #ffd700; }
+    .btn-search {
+      font-family: Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: bold;
+      padding: 14px 30px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      background: #f0c040;
+      color: #1a0533;
+      transition: all 0.2s;
+    }
+    .btn-search:hover { background: #ffd700; }
+
+    /* GAME SCREEN */
+    #game-screen { width: 100%; display: none; }
+
+    .game-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
+    .game-title { font-size: 2rem; color: #f0c040; }
+    .round-badge { font-size: 1.4rem; color: #fff; background: rgba(240,192,64,0.25); border: 2px solid #f0c040; border-radius: 50px; padding: 6px 20px; }
+    #btn-home { background: transparent; border: 2px solid #aaa; color: #aaa; font-size: 1.1rem; border-radius: 8px; padding: 8px 18px; cursor: pointer; transition: all 0.2s; }
+    #btn-home:hover { border-color: #fff; color: #fff; }
+
+    .question-card { background: rgba(255,255,255,0.07); border: 3px solid #f0c040; border-radius: 24px; padding: 40px; width: 100%; text-align: center; margin-bottom: 24px; }
+    .question-label { font-size: 1.3rem; color: #f0c040; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 20px; }
+    .question-text { font-size: 2.6rem; line-height: 1.5; color: #fff; margin-bottom: 10px; }
+    .question-hint { font-size: 1.3rem; color: #bbb; font-style: italic; margin-top: 12px; }
+    .blank { display: inline-block; min-width: 140px; border-bottom: 5px solid #f0c040; color: #f0c040; font-weight: bold; }
+
+    /* VIDEO */
+    .video-wrap { position: relative; width: 100%; max-width: 640px; margin: 0 auto 24px; border-radius: 16px; overflow: hidden; border: 3px solid #f0c040; background: #000; aspect-ratio: 16/9; }
+    .video-wrap iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+
+    /* IN-GAME SEARCH */
+    .ingame-search { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center; }
+    .ingame-search input { font-family: Georgia, serif; font-size: 1.2rem; padding: 10px 16px; border-radius: 10px; border: 2px solid #f0c040; background: rgba(0,0,0,0.4); color: #fff; outline: none; flex: 1; min-width: 200px; max-width: 400px; }
+    .ingame-search input::placeholder { color: #888; }
+    .btn-small { font-family: Georgia, serif; font-size: 1.2rem; font-weight: bold; padding: 10px 22px; border-radius: 10px; border: none; cursor: pointer; background: #f0c040; color: #1a0533; transition: all 0.2s; }
+    .btn-small:hover { background: #ffd700; }
+
+    /* ANSWER */
+    .answer-section { width: 100%; text-align: center; margin-bottom: 24px; }
+    #answer-box { background: rgba(0,0,0,0.4); border: 3px solid #4caf50; border-radius: 16px; padding: 28px 40px; display: none; margin-bottom: 20px; }
+    #answer-box .answer-label { font-size: 1.2rem; color: #4caf50; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 10px; }
+    #answer-box .answer-text { font-size: 3rem; font-weight: bold; color: #fff; text-shadow: 0 0 20px rgba(76,175,80,0.5); }
+    #answer-box .answer-sub { font-size: 1.5rem; color: #aaa; margin-top: 8px; }
+
+    /* BUTTONS */
+    .btn-row { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-top: 8px; }
+    .btn { font-family: Georgia, serif; font-size: 1.5rem; font-weight: bold; padding: 18px 42px; border-radius: 50px; border: none; cursor: pointer; transition: all 0.2s; letter-spacing: 1px; }
+    .btn:active { transform: scale(0.97); }
+    .btn-reveal { background: #f0c040; color: #1a0533; }
+    .btn-reveal:hover { background: #ffd700; box-shadow: 0 6px 24px rgba(240,192,64,0.5); }
+    .btn-next { background: #4caf50; color: #fff; }
+    .btn-next:hover { background: #66bb6a; box-shadow: 0 6px 24px rgba(76,175,80,0.4); }
+
+    /* PROGRESS */
+    .progress-bar-wrap { width: 100%; background: rgba(255,255,255,0.1); border-radius: 50px; height: 14px; margin-bottom: 28px; overflow: hidden; }
+    .progress-bar-fill { height: 100%; background: linear-gradient(90deg, #f0c040, #ffd700); border-radius: 50px; transition: width 0.5s ease; }
+
+    /* END */
+    #end-screen { display: none; text-align: center; padding: 60px 20px; }
+    #end-screen .trophy { font-size: 6rem; margin-bottom: 20px; }
+    #end-screen h2 { font-size: 3rem; color: #f0c040; margin-bottom: 16px; }
+    #end-screen p { font-size: 1.8rem; color: #ddd; margin-bottom: 40px; }
+
+    @media (max-width: 700px) {
+      header h1 { font-size: 1.6rem; }
+      .question-text { font-size: 1.9rem; }
+      .btn { font-size: 1.2rem; padding: 14px 28px; }
+      .mode-card { width: 90%; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🎵 Sing Along!</h1>
+  <div id="score-display">⭐ Score: <span id="score">0</span></div>
+</header>
+
+<main>
+
+  <!-- HOME SCREEN -->
+  <div id="home-screen">
+    <h2>Welcome!</h2>
+    <p>Choose a game and let's sing together 🎶</p>
+    <div class="mode-cards">
+      <div class="mode-card" onclick="startGame('fillBlanks')">
+        <div class="icon">✏️</div>
+        <h3>Fill in the Blanks</h3>
+        <p>A famous lyric with a missing word — can the group shout it out?</p>
+      </div>
+      <div class="mode-card" onclick="startGame('guessTune')">
+        <div class="icon">🎶</div>
+        <h3>Guess That Tune</h3>
+        <p>Listen to the song and guess the title!</p>
+      </div>
+      <div class="mode-card" onclick="startGame('guessSinger')">
+        <div class="icon">🎤</div>
+        <h3>Guess the Singer</h3>
+        <p>Can you name the artist who made it famous?</p>
+      </div>
+    </div>
+
+    <!-- Custom song search -->
+    <div class="search-box">
+      <h3>🔍 Search for any song on YouTube</h3>
+      <p style="color:#bbb;font-size:1.1rem;margin-bottom:16px;">Type a song title and we'll find it — perfect for any favourite!</p>
+      <div class="search-row">
+        <input type="text" id="home-search-input" placeholder="e.g. Danny Boy, My Way, Vera Lynn..." onkeydown="if(event.key==='Enter') homeSearch()">
+        <button class="btn-search" onclick="homeSearch()">▶ Play It</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GAME SCREEN -->
+  <div id="game-screen">
+    <div class="game-header">
+      <div class="game-title" id="game-title"></div>
+      <div class="round-badge">Round <span id="round-num">1</span> of <span id="round-total">8</span></div>
+      <button id="btn-home" onclick="goHome()">⬅ Home</button>
+    </div>
+
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+    </div>
+
+    <div class="question-card">
+      <div class="question-label" id="q-label"></div>
+      <div class="question-text" id="q-text"></div>
+      <div class="question-hint" id="q-hint"></div>
+    </div>
+
+    <!-- In-game song search -->
+    <div class="ingame-search">
+      <input type="text" id="ingame-search-input" placeholder="Search a different song on YouTube..." onkeydown="if(event.key==='Enter') ingameSearch()">
+      <button class="btn-small" onclick="ingameSearch()">🔍 Search</button>
+    </div>
+
+    <div class="video-wrap" id="video-wrap" style="display:none">
+      <iframe id="yt-frame" src="" allowfullscreen allow="autoplay; encrypted-media"></iframe>
+    </div>
+
+    <div class="answer-section">
+      <div id="answer-box">
+        <div class="answer-label">🎉 Answer!</div>
+        <div class="answer-text" id="answer-main"></div>
+        <div class="answer-sub" id="answer-sub"></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-reveal" id="btn-reveal" onclick="revealAnswer()">👁 Reveal Answer</button>
+        <button class="btn btn-next"   id="btn-next"   onclick="nextQuestion()" style="display:none">Next ➡</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- END SCREEN -->
+  <div id="end-screen">
+    <div class="trophy">🏆</div>
+    <h2>Brilliant!</h2>
+    <p id="end-msg">You finished the round — what a wonderful group!</p>
+    <div class="btn-row">
+      <button class="btn btn-reveal" onclick="startGame(currentMode)">🔄 Play Again</button>
+      <button class="btn btn-next"   onclick="goHome()">🏠 Choose Another Game</button>
+    </div>
+  </div>
+
+</main>
+
+<script>
+// ════════════════════════════════════════════
+//  GAME DATA  (preset questions)
+// ════════════════════════════════════════════
+const gameData = {
+  fillBlanks: [
+    { lyric: 'You are my sunshine, my only ___', blank: 'SUNSHINE', song: 'You Are My Sunshine', artist: 'Jimmie Davis (1940)', youtubeSearch: 'You Are My Sunshine original' },
+    { lyric: "We'll meet again, don't know where, don't know ___", blank: 'WHEN', song: "We'll Meet Again", artist: 'Vera Lynn (1939)', youtubeSearch: "Vera Lynn We'll Meet Again" },
+    { lyric: 'Que sera sera, whatever will be, will ___', blank: 'BE', song: 'Que Sera, Sera', artist: 'Doris Day (1956)', youtubeSearch: 'Doris Day Que Sera Sera' },
+    { lyric: 'Moon river, wider than a ___', blank: 'MILE', song: 'Moon River', artist: 'Audrey Hepburn (1961)', youtubeSearch: 'Moon River Audrey Hepburn Breakfast at Tiffanys' },
+    { lyric: 'What a wonderful ___', blank: 'WORLD', song: 'What a Wonderful World', artist: 'Louis Armstrong (1967)', youtubeSearch: 'Louis Armstrong What a Wonderful World' },
+    { lyric: "I'm singing in the ___, just singing in the rain", blank: 'RAIN', song: "Singin' in the Rain", artist: 'Gene Kelly (1952)', youtubeSearch: 'Gene Kelly Singin in the Rain' },
+    { lyric: 'When you walk through a storm, hold your head up ___', blank: 'HIGH', song: "You'll Never Walk Alone", artist: 'Gerry & The Pacemakers (1963)', youtubeSearch: "Gerry Pacemakers You'll Never Walk Alone" },
+    { lyric: 'My way — and now the end is ___', blank: 'NEAR', song: 'My Way', artist: 'Frank Sinatra (1969)', youtubeSearch: 'Frank Sinatra My Way' },
+    { lyric: 'Oh Danny boy, the pipes, the pipes are ___', blank: 'CALLING', song: 'Danny Boy', artist: 'Traditional Irish Song', youtubeSearch: 'Danny Boy Irish song' },
+    { lyric: 'Somewhere over the rainbow, ___ are blue', blank: 'SKIES', song: 'Somewhere Over the Rainbow', artist: 'Judy Garland (1939)', youtubeSearch: 'Judy Garland Somewhere Over the Rainbow' }
+  ],
+  guessTune: [
+    { question: '🎵 Listen carefully... what song is this?', answer: 'What a Wonderful World', artist: 'Louis Armstrong', hint: '🌍 Released in 1967', youtubeSearch: 'Louis Armstrong What a Wonderful World' },
+    { question: '🎵 Who remembers this tune?', answer: "We'll Meet Again", artist: 'Vera Lynn', hint: '🌻 A wartime favourite', youtubeSearch: "Vera Lynn We'll Meet Again" },
+    { question: '🎵 Name that tune!', answer: 'Moon River', artist: 'Audrey Hepburn', hint: '🌙 Won an Oscar in 1962', youtubeSearch: 'Moon River Audrey Hepburn' },
+    { question: '🎵 Can you name this classic?', answer: 'My Way', artist: 'Frank Sinatra', hint: '🎩 "And so I face the final curtain..."', youtubeSearch: 'Frank Sinatra My Way' },
+    { question: '🎵 Hum along... what\'s the name?', answer: "Singin' in the Rain", artist: 'Gene Kelly', hint: '☔ A 1952 Hollywood classic', youtubeSearch: 'Gene Kelly Singin in the Rain' },
+    { question: '🎵 Who knows this wartime song?', answer: 'You Are My Sunshine', artist: 'Jimmie Davis', hint: '☀️ State song of Louisiana!', youtubeSearch: 'You Are My Sunshine original' },
+    { question: "🎵 What's the name of this tune?", answer: "You'll Never Walk Alone", artist: 'Gerry & The Pacemakers', hint: '⚽ Also a famous football anthem', youtubeSearch: "You'll Never Walk Alone Gerry Pacemakers" },
+    { question: '🎵 A golden oldie — can you name it?', answer: 'Que Sera, Sera', artist: 'Doris Day', hint: '🌈 From a Hitchcock film (1956)', youtubeSearch: 'Doris Day Que Sera Sera' }
+  ],
+  guessSinger: [
+    { question: '🎤 Who sang "What a Wonderful World"?', answer: 'Louis Armstrong', fact: '"Satchmo" — legendary jazz trumpeter', youtubeSearch: 'Louis Armstrong What a Wonderful World', hint: '🎺 Famous for his raspy voice and trumpet' },
+    { question: '🎤 Who made "My Way" famous?', answer: 'Frank Sinatra', fact: '"Ol\' Blue Eyes"', youtubeSearch: 'Frank Sinatra My Way', hint: '🎩 Known as "Ol\' Blue Eyes"' },
+    { question: '🎤 Who sang "We\'ll Meet Again"?', answer: 'Vera Lynn', fact: '"The Forces\' Sweetheart" — lifted spirits during WWII', youtubeSearch: "Vera Lynn We'll Meet Again", hint: '🌻 Called "The Forces\' Sweetheart"' },
+    { question: '🎤 Who sang "Moon River" in Breakfast at Tiffany\'s?', answer: 'Audrey Hepburn', fact: 'Beloved actress and UNICEF ambassador', youtubeSearch: 'Moon River Audrey Hepburn', hint: '💎 Also known for Sabrina and Roman Holiday' },
+    { question: '🎤 Who danced and sang in the rain?', answer: 'Gene Kelly', fact: "Hollywood's greatest dancer — the umbrella scene is iconic!", youtubeSearch: 'Gene Kelly Singin in the Rain', hint: '💃 Famous for his athletic tap dancing style' },
+    { question: '🎤 Who sang "Somewhere Over the Rainbow"?', answer: 'Judy Garland', fact: 'Starred as Dorothy in The Wizard of Oz at just 17', youtubeSearch: 'Judy Garland Somewhere Over the Rainbow', hint: '🌈 She played Dorothy in The Wizard of Oz' },
+    { question: '🎤 Who sang "Que Sera, Sera"?', answer: 'Doris Day', fact: "America's sweetheart — actress, singer, animal advocate", youtubeSearch: 'Doris Day Que Sera Sera', hint: '🌸 Starred alongside Rock Hudson' },
+    { question: '🎤 Whose version of "Danny Boy" is most famous?', answer: 'Bing Crosby', fact: "Bing Crosby's 1945 recording is the most beloved", youtubeSearch: 'Bing Crosby Danny Boy', hint: '🍀 The famous crooner with the smooth warm voice' }
+  ]
+};
+
+// ════════════════════════════════════════════
+//  STATE
+// ════════════════════════════════════════════
+let currentMode    = null;
+let questions      = [];
+let currentIndex   = 0;
+let score          = 0;
+
+// ════════════════════════════════════════════
+//  YOUTUBE SEARCH HELPER
+// ════════════════════════════════════════════
+function buildYTSearchURL(query) {
+  // Uses YouTube's embed search — no API key needed
+  return 'https://www.youtube.com/embed?listType=search&list=' + encodeURIComponent(query) + '&autoplay=1&rel=0&modestbranding=1';
+}
+
+function playSearch(query) {
+  if (!query.trim()) return;
+  document.getElementById('yt-frame').src = buildYTSearchURL(query);
+  document.getElementById('video-wrap').style.display = '';
+}
+
+function homeSearch() {
+  const q = document.getElementById('home-search-input').value;
+  if (!q.trim()) return;
+  // Navigate to a simple player view
+  document.getElementById('home-screen').style.display = 'none';
+  document.getElementById('game-screen').style.display = '';
+  document.getElementById('game-title').textContent = '🔍 Free Play';
+  document.getElementById('round-num').textContent = '—';
+  document.getElementById('round-total').textContent = '—';
+  document.getElementById('progress-fill').style.width = '0%';
+  document.getElementById('q-label').textContent = 'Now playing';
+  document.getElementById('q-text').textContent = q;
+  document.getElementById('q-hint').textContent = '';
+  document.getElementById('answer-box').style.display = 'none';
+  document.getElementById('btn-reveal').style.display = 'none';
+  document.getElementById('btn-next').style.display = 'none';
+  playSearch(q);
+  currentMode = null;
+}
+
+function ingameSearch() {
+  const q = document.getElementById('ingame-search-input').value;
+  if (!q.trim()) return;
+  playSearch(q);
+  document.getElementById('ingame-search-input').value = '';
+}
+
+// ════════════════════════════════════════════
+//  NAVIGATION
+// ════════════════════════════════════════════
+function goHome() {
+  stopVideo();
+  show('home-screen'); hide('game-screen'); hide('end-screen');
+  document.getElementById('btn-reveal').style.display = '';
+  document.getElementById('btn-next').style.display = 'none';
+}
+
+function startGame(mode) {
+  currentMode  = mode;
+  questions    = shuffle([...gameData[mode]]);
+  currentIndex = 0;
+  score        = 0;
+  document.getElementById('score').textContent = 0;
+  show('game-screen'); hide('home-screen'); hide('end-screen');
+  const titles = { fillBlanks: '✏️  Fill in the Blanks', guessTune: '🎶  Guess That Tune', guessSinger: '🎤  Guess the Singer' };
+  document.getElementById('game-title').textContent = titles[mode];
+  document.getElementById('round-total').textContent = questions.length;
+  loadQuestion();
+}
+
+// ════════════════════════════════════════════
+//  QUESTION
+// ════════════════════════════════════════════
+function loadQuestion() {
+  const q = questions[currentIndex];
+  document.getElementById('round-num').textContent = currentIndex + 1;
+  document.getElementById('progress-fill').style.width = ((currentIndex / questions.length) * 100) + '%';
+
+  const labels = { fillBlanks: 'Complete the lyric', guessTune: 'Name that tune', guessSinger: 'Name the singer' };
+  document.getElementById('q-label').textContent = labels[currentMode];
+
+  if (currentMode === 'fillBlanks') {
+    const parts = q.lyric.split('___');
+    document.getElementById('q-text').innerHTML = esc(parts[0]) + '<span class="blank">___</span>' + esc(parts[1] || '');
+  } else {
+    document.getElementById('q-text').textContent = q.question;
+  }
+  document.getElementById('q-hint').textContent = q.hint || '';
+
+  // Auto-load YouTube search
+  if (q.youtubeSearch) {
+    document.getElementById('yt-frame').src = buildYTSearchURL(q.youtubeSearch);
+    show('video-wrap');
+  } else {
+    hide('video-wrap');
+  }
+
+  hide('answer-box');
+  document.getElementById('btn-reveal').style.display = '';
+  document.getElementById('btn-next').style.display = 'none';
+  document.getElementById('ingame-search-input').value = '';
+}
+
+function revealAnswer() {
+  const q = questions[currentIndex];
+  if (currentMode === 'fillBlanks') {
+    const parts = q.lyric.split('___');
+    document.getElementById('q-text').innerHTML = esc(parts[0]) + '<span class="blank" style="color:#4caf50;border-color:#4caf50">' + q.blank + '</span>' + esc(parts[1] || '');
+    document.getElementById('answer-main').textContent = '🎵 ' + q.song;
+    document.getElementById('answer-sub').textContent  = '— ' + q.artist;
+  } else if (currentMode === 'guessTune') {
+    document.getElementById('answer-main').textContent = '🎵 ' + q.answer;
+    document.getElementById('answer-sub').textContent  = '— ' + q.artist;
+  } else {
+    document.getElementById('answer-main').textContent = '🎤 ' + q.answer;
+    document.getElementById('answer-sub').textContent  = q.fact;
+  }
+  show('answer-box');
+  document.getElementById('btn-reveal').style.display = 'none';
+  document.getElementById('btn-next').style.display = '';
+  score++;
+  document.getElementById('score').textContent = score;
+}
+
+function nextQuestion() {
+  currentIndex++;
+  if (currentIndex >= questions.length) {
+    endGame();
+  } else {
+    loadQuestion();
+  }
+}
+
+function endGame() {
+  stopVideo();
+  hide('game-screen'); show('end-screen');
+  document.getElementById('end-msg').textContent = 'You got ' + score + ' out of ' + questions.length + ' — fantastic effort! 🎉';
+}
+
+// ════════════════════════════════════════════
+//  HELPERS
+// ════════════════════════════════════════════
+function show(id) { document.getElementById(id).style.display = ''; }
+function hide(id) { document.getElementById(id).style.display = 'none'; }
+function stopVideo() { document.getElementById('yt-frame').src = ''; hide('video-wrap'); }
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+function esc(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>
