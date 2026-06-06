@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🎵 Sing Along! Music Memory Game</title>
+  <title>ðµ Sing Along! Music Memory Game</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -89,8 +89,8 @@
     .game-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
     .game-title { font-size: 2rem; color: #f0c040; }
     .round-badge { font-size: 1.4rem; color: #fff; background: rgba(240,192,64,0.25); border: 2px solid #f0c040; border-radius: 50px; padding: 6px 20px; }
-    #btn-home { background: transparent; border: 2px solid #aaa; color: #aaa; font-size: 1.1rem; border-radius: 8px; padding: 8px 18px; cursor: pointer; transition: all 0.2s; }
-    #btn-home:hover { border-color: #fff; color: #fff; }
+    #btn-home { background: rgba(240,192,64,0.15); border: 2px solid #f0c040; color: #f0c040; font-size: 1.2rem; font-weight: bold; border-radius: 50px; padding: 10px 24px; cursor: pointer; transition: all 0.2s; }
+    #btn-home:hover { background: rgba(240,192,64,0.3); }
 
     .question-card { background: rgba(255,255,255,0.07); border: 3px solid #f0c040; border-radius: 24px; padding: 40px; width: 100%; text-align: center; margin-bottom: 24px; }
     .question-label { font-size: 1.3rem; color: #f0c040; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 20px; }
@@ -146,8 +146,8 @@
 <body>
 
 <header>
-  <h1>🎵 Sing Along!</h1>
-  <div id="score-display">⭐ Score: <span id="score">0</span></div>
+  <h1>ðµ Sing Along!</h1>
+  <div id="score-display">â­ Score: <span id="score">0</span></div>
 </header>
 
 <main>
@@ -155,42 +155,40 @@
   <!-- HOME SCREEN -->
   <div id="home-screen">
     <h2>Welcome!</h2>
-    <p>Choose a game and let's sing together 🎶</p>
+    <p>Choose a game and let's sing together ð¶</p>
     <div class="mode-cards">
       <div class="mode-card" onclick="startGame('fillBlanks')">
-        <div class="icon">✏️</div>
+        <div class="icon">âï¸</div>
         <h3>Fill in the Blanks</h3>
-        <p>A famous lyric with a missing word — can the group shout it out?</p>
+        <p>A famous lyric with a missing word â can the group shout it out?</p>
       </div>
       <div class="mode-card" onclick="startGame('guessTune')">
-        <div class="icon">🎶</div>
+        <div class="icon">ð¶</div>
         <h3>Guess That Tune</h3>
         <p>Listen to the song and guess the title!</p>
       </div>
       <div class="mode-card" onclick="startGame('guessSinger')">
-        <div class="icon">🎤</div>
+        <div class="icon">ð¤</div>
         <h3>Guess the Singer</h3>
         <p>Can you name the artist who made it famous?</p>
       </div>
     </div>
 
-    <!-- Custom song search -->
     <div class="search-box">
-      <h3>🔍 Search for any song on YouTube</h3>
-      <p style="color:#bbb;font-size:1.1rem;margin-bottom:16px;">Type a song title and we'll find it — perfect for any favourite!</p>
+      <h3>ð Search for any song on YouTube</h3>
+      <p style="color:#bbb;font-size:1.1rem;margin-bottom:16px;">Type a song title and we'll find it â perfect for any favourite!</p>
       <div class="search-row">
         <input type="text" id="home-search-input" placeholder="e.g. Danny Boy, My Way, Vera Lynn..." onkeydown="if(event.key==='Enter') homeSearch()">
-        <button class="btn-search" onclick="homeSearch()">▶ Play It</button>
+        <button class="btn-search" onclick="homeSearch()">â¶ Play It</button>
       </div>
     </div>
   </div>
 
-  <!-- GAME SCREEN -->
   <div id="game-screen">
     <div class="game-header">
       <div class="game-title" id="game-title"></div>
       <div class="round-badge">Round <span id="round-num">1</span> of <span id="round-total">8</span></div>
-      <button id="btn-home" onclick="goHome()">⬅ Home</button>
+      <button id="btn-home" onclick="goHome()">â¬ Home</button>
     </div>
 
     <div class="progress-bar-wrap">
@@ -203,10 +201,9 @@
       <div class="question-hint" id="q-hint"></div>
     </div>
 
-    <!-- In-game song search -->
     <div class="ingame-search">
       <input type="text" id="ingame-search-input" placeholder="Search a different song on YouTube..." onkeydown="if(event.key==='Enter') ingameSearch()">
-      <button class="btn-small" onclick="ingameSearch()">🔍 Search</button>
+      <button class="btn-small" onclick="ingameSearch()">ð Search</button>
     </div>
 
     <div class="video-wrap" id="video-wrap" style="display:none">
@@ -215,226 +212,85 @@
 
     <div class="answer-section">
       <div id="answer-box">
-        <div class="answer-label">🎉 Answer!</div>
+        <div class="answer-label">ð Answer!</div>
         <div class="answer-text" id="answer-main"></div>
         <div class="answer-sub" id="answer-sub"></div>
       </div>
       <div class="btn-row">
-        <button class="btn btn-reveal" id="btn-reveal" onclick="revealAnswer()">👁 Reveal Answer</button>
-        <button class="btn btn-next"   id="btn-next"   onclick="nextQuestion()" style="display:none">Next ➡</button>
+        <button class="btn btn-reveal" id="btn-reveal" onclick="revealAnswer()">ð Reveal Answer</button>
+        <button class="btn btn-next" id="btn-next" onclick="nextQuestion()" style="display:none">Next â¡</button>
       </div>
     </div>
   </div>
 
-  <!-- END SCREEN -->
   <div id="end-screen">
-    <div class="trophy">🏆</div>
+    <div class="trophy">ð</div>
     <h2>Brilliant!</h2>
-    <p id="end-msg">You finished the round — what a wonderful group!</p>
+    <p id="end-msg">You finished the round â what a wonderful group!</p>
     <div class="btn-row">
-      <button class="btn btn-reveal" onclick="startGame(currentMode)">🔄 Play Again</button>
-      <button class="btn btn-next"   onclick="goHome()">🏠 Choose Another Game</button>
+      <button class="btn btn-reveal" onclick="startGame(currentMode)">ð Play Again</button>
+      <button class="btn btn-next" onclick="goHome()">ð  Choose Another Game</button>
     </div>
   </div>
 
 </main>
 
 <script>
-// ════════════════════════════════════════════
-//  GAME DATA  (preset questions)
-// ════════════════════════════════════════════
 const gameData = {
   fillBlanks: [
     { lyric: 'You are my sunshine, my only ___', blank: 'SUNSHINE', song: 'You Are My Sunshine', artist: 'Jimmie Davis (1940)', youtubeSearch: 'You Are My Sunshine original' },
-    { lyric: "We'll meet again, don't know where, don't know ___", blank: 'WHEN', song: "We'll Meet Again", artist: 'Vera Lynn (1939)', youtubeSearch: "Vera Lynn We'll Meet Again" },
+    { lyric: "We'll meet again, don't know where, don't know ___", blank: 'WHEN', song: "We'll Meet Again", artist: 'Vera Lynn (1938)', youtubeSearch: "Vera Lynn We'll Meet Again" },
     { lyric: 'Que sera sera, whatever will be, will ___', blank: 'BE', song: 'Que Sera, Sera', artist: 'Doris Day (1956)', youtubeSearch: 'Doris Day Que Sera Sera' },
-    { lyric: 'Moon river, wider than a ___', blank: 'MILE', song: 'Moon River', artist: 'Audrey Hepburn (1961)', youtubeSearch: 'Moon River Audrey Hepburn Breakfast at Tiffanys' },
+    { lyric: 'Moon river, wider than a ___', blank: 'MILE', song: 'Moon River', artist: 'Audrey Hepburn (1961)', youtubeSearch: 'Moon River Audrey Hepburn' },
     { lyric: 'What a wonderful ___', blank: 'WORLD', song: 'What a Wonderful World', artist: 'Louis Armstrong (1967)', youtubeSearch: 'Louis Armstrong What a Wonderful World' },
     { lyric: "I'm singing in the ___, just singing in the rain", blank: 'RAIN', song: "Singin' in the Rain", artist: 'Gene Kelly (1952)', youtubeSearch: 'Gene Kelly Singin in the Rain' },
     { lyric: 'When you walk through a storm, hold your head up ___', blank: 'HIGH', song: "You'll Never Walk Alone", artist: 'Gerry & The Pacemakers (1963)', youtubeSearch: "Gerry Pacemakers You'll Never Walk Alone" },
-    { lyric: 'My way — and now the end is ___', blank: 'NEAR', song: 'My Way', artist: 'Frank Sinatra (1969)', youtubeSearch: 'Frank Sinatra My Way' },
+    { lyric: 'My way â and now the end is ___', blank: 'NEAR', song: 'My Way', artist: 'Frank Sinatra (1969)', youtubeSearch: 'Frank Sinatra My Way' },
     { lyric: 'Oh Danny boy, the pipes, the pipes are ___', blank: 'CALLING', song: 'Danny Boy', artist: 'Traditional Irish Song', youtubeSearch: 'Danny Boy Irish song' },
     { lyric: 'Somewhere over the rainbow, ___ are blue', blank: 'SKIES', song: 'Somewhere Over the Rainbow', artist: 'Judy Garland (1939)', youtubeSearch: 'Judy Garland Somewhere Over the Rainbow' }
   ],
   guessTune: [
-    { question: '🎵 Listen carefully... what song is this?', answer: 'What a Wonderful World', artist: 'Louis Armstrong', hint: '🌍 Released in 1967', youtubeSearch: 'Louis Armstrong What a Wonderful World' },
-    { question: '🎵 Who remembers this tune?', answer: "We'll Meet Again", artist: 'Vera Lynn', hint: '🌻 A wartime favourite', youtubeSearch: "Vera Lynn We'll Meet Again" },
-    { question: '🎵 Name that tune!', answer: 'Moon River', artist: 'Audrey Hepburn', hint: '🌙 Won an Oscar in 1962', youtubeSearch: 'Moon River Audrey Hepburn' },
-    { question: '🎵 Can you name this classic?', answer: 'My Way', artist: 'Frank Sinatra', hint: '🎩 "And so I face the final curtain..."', youtubeSearch: 'Frank Sinatra My Way' },
-    { question: '🎵 Hum along... what\'s the name?', answer: "Singin' in the Rain", artist: 'Gene Kelly', hint: '☔ A 1952 Hollywood classic', youtubeSearch: 'Gene Kelly Singin in the Rain' },
-    { question: '🎵 Who knows this wartime song?', answer: 'You Are My Sunshine', artist: 'Jimmie Davis', hint: '☀️ State song of Louisiana!', youtubeSearch: 'You Are My Sunshine original' },
-    { question: "🎵 What's the name of this tune?", answer: "You'll Never Walk Alone", artist: 'Gerry & The Pacemakers', hint: '⚽ Also a famous football anthem', youtubeSearch: "You'll Never Walk Alone Gerry Pacemakers" },
-    { question: '🎵 A golden oldie — can you name it?', answer: 'Que Sera, Sera', artist: 'Doris Day', hint: '🌈 From a Hitchcock film (1956)', youtubeSearch: 'Doris Day Que Sera Sera' }
+    { question: 'ðµ Listen... what song is this?', answer: 'What a Wonderful World', artist: 'Louis Armstrong', hint: 'ð 1967', youtubeSearch: 'Louis Armstrong What a Wonderful World' },
+    { question: 'ðµ Who remembers this tune?', answer: "We'll Meet Again", artist: 'Vera Lynn', hint: 'ð» A wartime favourite', youtubeSearch: "Vera Lynn We'll Meet Again" },
+    { question: 'ðµ Name that tune!', answer: 'Moon River', artist: 'Audrey Hepburn', hint: 'ð Won an Oscar in 1962', youtubeSearch: 'Moon River Audrey Hepburn' },
+    { question: 'ðµ Can you name this classic?', answer: 'My Way', artist: 'Frank Sinatra', hint: 'ð© "And so I face the final curtain..."', youtubeSearch: 'Frank Sinatra My Way' },
+    { question: 'ðµ Hum along... what's the name?', answer: "Singin' in the Rain", artist: 'Gene Kelly', hint: 'â 1952 Hollywood classic', youtubeSearch: 'Gene Kelly Singin in the Rain' },
+    { question: 'ðµ Who knows this wartime song?', answer: 'You Are My Sunshine', artist: 'Jimmie Davis', hint: 'âï¸ State song of Louisiana!', youtubeSearch: 'You Are My Sunshine original' },
+    { question: 'ðµ What's the name of this tune?', answer: "You'll Never Walk Alone", artist: 'Gerry & The Pacemakers', hint: 'â½ Also a famous football anthem', youtubeSearch: "You'll Never Walk Alone Gerry Pacemakers" },
+    { question: 'ðµ A golden oldie â can you name it?', answer: 'Que Sera, Sera', artist: 'Doris Day',youtubeSearch: 'Doris Day Que Sera Sera', hint: 'ð From a Hitchcock film (1956)' }
   ],
   guessSinger: [
-    { question: '🎤 Who sang "What a Wonderful World"?', answer: 'Louis Armstrong', fact: '"Satchmo" — legendary jazz trumpeter', youtubeSearch: 'Louis Armstrong What a Wonderful World', hint: '🎺 Famous for his raspy voice and trumpet' },
-    { question: '🎤 Who made "My Way" famous?', answer: 'Frank Sinatra', fact: '"Ol\' Blue Eyes"', youtubeSearch: 'Frank Sinatra My Way', hint: '🎩 Known as "Ol\' Blue Eyes"' },
-    { question: '🎤 Who sang "We\'ll Meet Again"?', answer: 'Vera Lynn', fact: '"The Forces\' Sweetheart" — lifted spirits during WWII', youtubeSearch: "Vera Lynn We'll Meet Again", hint: '🌻 Called "The Forces\' Sweetheart"' },
-    { question: '🎤 Who sang "Moon River" in Breakfast at Tiffany\'s?', answer: 'Audrey Hepburn', fact: 'Beloved actress and UNICEF ambassador', youtubeSearch: 'Moon River Audrey Hepburn', hint: '💎 Also known for Sabrina and Roman Holiday' },
-    { question: '🎤 Who danced and sang in the rain?', answer: 'Gene Kelly', fact: "Hollywood's greatest dancer — the umbrella scene is iconic!", youtubeSearch: 'Gene Kelly Singin in the Rain', hint: '💃 Famous for his athletic tap dancing style' },
-    { question: '🎤 Who sang "Somewhere Over the Rainbow"?', answer: 'Judy Garland', fact: 'Starred as Dorothy in The Wizard of Oz at just 17', youtubeSearch: 'Judy Garland Somewhere Over the Rainbow', hint: '🌈 She played Dorothy in The Wizard of Oz' },
-    { question: '🎤 Who sang "Que Sera, Sera"?', answer: 'Doris Day', fact: "America's sweetheart — actress, singer, animal advocate", youtubeSearch: 'Doris Day Que Sera Sera', hint: '🌸 Starred alongside Rock Hudson' },
-    { question: '🎤 Whose version of "Danny Boy" is most famous?', answer: 'Bing Crosby', fact: "Bing Crosby's 1945 recording is the most beloved", youtubeSearch: 'Bing Crosby Danny Boy', hint: '🍀 The famous crooner with the smooth warm voice' }
+    { question: 'ð¤ Who sang "What a Wonderful World"?', answer: 'Louis Armstrong', fact: '"Satchmo" â legendary jazz trumpeter', youtubeSearch: 'Louis Armstrong What a Wonderful World', hint: 'ðº Famous for his raspy voice and trumpet' },
+    { question: 'ð¤ Who made "My Way" famous?', answer: 'Frank Sinatra', fact: '"Ol\' Blue Eyes"', youtubeSearch: 'Frank Sinatra My Way', hint: 'ð© Known as "Ol\' Blue Eyes"' },
+    { question: 'ð¤ Who sang "We\'ll Meet Again"?', answer: 'Vera Lynn', fact: '"The Forces\' Sweetheart" â lifted spirits during WWII', youtubeSearch: "Vera Lynn We'll Meet Again", hint: 'ð» Called "The Forces\' Sweetheart"' },
+    { question: 'ð¤ Who sang "Moon River" in Breakfast at Tiffany\'s?', answer: 'Audrey Hepburn', fact: 'Beloved actress and UNICEF ambassador', youtubeSearch: 'Moon River Audrey Hepburn', hint: 'ð Also known for Sabrina and Roman Holiday' },
+    { question: 'ð¤ Who danced and sang in the rain?', answer: 'Gene Kelly', fact: "Hollywood's greatest dancer â the umbrella scene is iconic!", youtubeSearch: 'Gene Kelly Singin in the Rain', hint: 'ð Famous for his athletic tap dancing style' },
+    { question: 'ð¤ Who sang "Somewhere Over the Rainbow"?', answer: 'Judy Garland', fact: 'Starred as Dorothy in The Wizard of Oz at just 17', youtubeSearch: 'Judy Garland Somewhere Over the Rainbow', hint: 'ð She played Dorothy in The Wizard of Oz' },
+    { question: 'ð¤ Who sang "Que Sera, Sera"?', answer: 'Doris Day', fact: "America's sweetheart â actress, singer, animal advocate", youtubeSearch: 'Doris Day Que Sera Sera', hint: 'ð¸ Starred alongside Rock Hudson' },
+    { question: 'ð¤ Whose version of "Danny Boy" is most famous?', answer: 'Bing Crosby', fact: "Bing Crosby's 1945 recording is the most beloved", youtubeSearch: 'Bing Crosby Danny Boy', hint: 'ð The famous crooner with the smooth warm voice' }
   ]
 };
 
-// ════════════════════════════════════════════
-//  STATE
-// ════════════════════════════════════════════
-let currentMode    = null;
-let questions      = [];
-let currentIndex   = 0;
-let score          = 0;
+let currentMode=null, questions=[], currentIndex=0, score=0;
 
-// ════════════════════════════════════════════
-//  YOUTUBE SEARCH HELPER
-// ════════════════════════════════════════════
-function buildYTSearchURL(query) {
-  // Uses YouTube's embed search — no API key needed
-  return 'https://www.youtube.com/embed?listType=search&list=' + encodeURIComponent(query) + '&autoplay=1&rel=0&modestbranding=1';
-}
-
-function playSearch(query) {
-  if (!query.trim()) return;
-  document.getElementById('yt-frame').src = buildYTSearchURL(query);
-  document.getElementById('video-wrap').style.display = '';
-}
-
-function homeSearch() {
-  const q = document.getElementById('home-search-input').value;
-  if (!q.trim()) return;
-  // Navigate to a simple player view
-  document.getElementById('home-screen').style.display = 'none';
-  document.getElementById('game-screen').style.display = '';
-  document.getElementById('game-title').textContent = '🔍 Free Play';
-  document.getElementById('round-num').textContent = '—';
-  document.getElementById('round-total').textContent = '—';
-  document.getElementById('progress-fill').style.width = '0%';
-  document.getElementById('q-label').textContent = 'Now playing';
-  document.getElementById('q-text').textContent = q;
-  document.getElementById('q-hint').textContent = '';
-  document.getElementById('answer-box').style.display = 'none';
-  document.getElementById('btn-reveal').style.display = 'none';
-  document.getElementById('btn-next').style.display = 'none';
-  playSearch(q);
-  currentMode = null;
-}
-
-function ingameSearch() {
-  const q = document.getElementById('ingame-search-input').value;
-  if (!q.trim()) return;
-  playSearch(q);
-  document.getElementById('ingame-search-input').value = '';
-}
-
-// ════════════════════════════════════════════
-//  NAVIGATION
-// ════════════════════════════════════════════
-function goHome() {
-  stopVideo();
-  show('home-screen'); hide('game-screen'); hide('end-screen');
-  document.getElementById('btn-reveal').style.display = '';
-  document.getElementById('btn-next').style.display = 'none';
-}
-
-function startGame(mode) {
-  currentMode  = mode;
-  questions    = shuffle([...gameData[mode]]);
-  currentIndex = 0;
-  score        = 0;
-  document.getElementById('score').textContent = 0;
-  show('game-screen'); hide('home-screen'); hide('end-screen');
-  const titles = { fillBlanks: '✏️  Fill in the Blanks', guessTune: '🎶  Guess That Tune', guessSinger: '🎤  Guess the Singer' };
-  document.getElementById('game-title').textContent = titles[mode];
-  document.getElementById('round-total').textContent = questions.length;
-  loadQuestion();
-}
-
-// ════════════════════════════════════════════
-//  QUESTION
-// ════════════════════════════════════════════
-function loadQuestion() {
-  const q = questions[currentIndex];
-  document.getElementById('round-num').textContent = currentIndex + 1;
-  document.getElementById('progress-fill').style.width = ((currentIndex / questions.length) * 100) + '%';
-
-  const labels = { fillBlanks: 'Complete the lyric', guessTune: 'Name that tune', guessSinger: 'Name the singer' };
-  document.getElementById('q-label').textContent = labels[currentMode];
-
-  if (currentMode === 'fillBlanks') {
-    const parts = q.lyric.split('___');
-    document.getElementById('q-text').innerHTML = esc(parts[0]) + '<span class="blank">___</span>' + esc(parts[1] || '');
-  } else {
-    document.getElementById('q-text').textContent = q.question;
-  }
-  document.getElementById('q-hint').textContent = q.hint || '';
-
-  // Auto-load YouTube search
-  if (q.youtubeSearch) {
-    document.getElementById('yt-frame').src = buildYTSearchURL(q.youtubeSearch);
-    show('video-wrap');
-  } else {
-    hide('video-wrap');
-  }
-
-  hide('answer-box');
-  document.getElementById('btn-reveal').style.display = '';
-  document.getElementById('btn-next').style.display = 'none';
-  document.getElementById('ingame-search-input').value = '';
-}
-
-function revealAnswer() {
-  const q = questions[currentIndex];
-  if (currentMode === 'fillBlanks') {
-    const parts = q.lyric.split('___');
-    document.getElementById('q-text').innerHTML = esc(parts[0]) + '<span class="blank" style="color:#4caf50;border-color:#4caf50">' + q.blank + '</span>' + esc(parts[1] || '');
-    document.getElementById('answer-main').textContent = '🎵 ' + q.song;
-    document.getElementById('answer-sub').textContent  = '— ' + q.artist;
-  } else if (currentMode === 'guessTune') {
-    document.getElementById('answer-main').textContent = '🎵 ' + q.answer;
-    document.getElementById('answer-sub').textContent  = '— ' + q.artist;
-  } else {
-    document.getElementById('answer-main').textContent = '🎤 ' + q.answer;
-    document.getElementById('answer-sub').textContent  = q.fact;
-  }
-  show('answer-box');
-  document.getElementById('btn-reveal').style.display = 'none';
-  document.getElementById('btn-next').style.display = '';
-  score++;
-  document.getElementById('score').textContent = score;
-}
-
-function nextQuestion() {
-  currentIndex++;
-  if (currentIndex >= questions.length) {
-    endGame();
-  } else {
-    loadQuestion();
-  }
-}
-
-function endGame() {
-  stopVideo();
-  hide('game-screen'); show('end-screen');
-  document.getElementById('end-msg').textContent = 'You got ' + score + ' out of ' + questions.length + ' — fantastic effort! 🎉';
-}
-
-// ════════════════════════════════════════════
-//  HELPERS
-// ════════════════════════════════════════════
-function show(id) { document.getElementById(id).style.display = ''; }
-function hide(id) { document.getElementById(id).style.display = 'none'; }
-function stopVideo() { document.getElementById('yt-frame').src = ''; hide('video-wrap'); }
-function shuffle(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
-}
-function esc(s) {
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
+function buildYTSearchURL(q){return'https://www.youtube.com/embed?listType=search&list='+encodeURIComponent(q)+'&autoplay=1&rel=0&modestbranding=1';}
+function playSearch(q){if(!trim(q))return;document.getElementById('yt-frame').src=buildYTSearchURL(q);document.getElementById('video-wrap').style.display='';}
+function trim(s){return s.trim();}
+function homeSearch(){const q=document.getElementById('home-search-input').value;if(!trim(q))return;hide('home-screen');show('game-screen');document.getElementById('game-title').textContent='ð Free Play';document.getElementById('round-num').textContent='â';document.getElementById('round-total').textContent='â';document.getElementById('progress-fill').style.width='0%';document.getElementById('q-label').textContent='Now playing';document.getElementById('q-text').textContent=q;document.getElementById('q-hint').textContent='';hide('answer-box');document.getElementById('btn-reveal').style.display='none';document.getElementById('btn-next').style.display='none';playSearch(q);currentMode=null;history.pushState({screen:'game'},'');}
+function ingameSearch(){const q=document.getElementById('ingame-search-input').value;if(!trim(q))return;playSearch(q);document.getElementById('ingame-search-input').value='';}
+function goHome(){stopVideo();show('home-screen');hide('game-screen');hide('end-screen');document.getElementById('btn-reveal').style.display='';document.getElementById('btn-next').style.display='none';history.pushState({screen:'home'},'');}
+function startGame(mode){currentMode=mode;questions=shuffle([...gameData[mode]]);currentIndex=0;score=0;document.getElementById('score').textContent=0;show('game-screen');hide('home-screen');hide('end-screen');const titles={fillBlanks:'âï¸  Fill in the Blanks',guessTune:'ð¶  Guess That Tune',guessSinger:'ð¤  Guess the Singer'};document.getElementById('game-title').textContent=titles[mode];document.getElementById('round-total').textContent=questions.length;history.pushState({screen:'game',mode},'');loadQuestion();}
+window.addEventListener('popstate',function(e){const s=e.state;if(!s||s.screen==='home'){stopVideo();show('home-screen');hide('game-screen');hide('end-screen');document.getElementById('btn-reveal').style.display='';document.getElementById('btn-next').style.display='none';}});
+history.replaceState({screen:'home'},'');
+function loadQuestion(){const q=questions[currentIndex];document.getElementById('round-num').textContent=currentIndex+1;document.getElementById('progress-fill').style.width=((currentIndex/questions.length)*100)+'%';const labels={fillBlanks:'}Complete the lyric',guessTune:'Name that tune',guessSinger:'Name the singer'};document.getElementById('q-label').textContent=labels[currentMode];if(currentMode==='fillBlanks'){const parts=q.lyric.split('___');document.getElementById('q-text').innerHTML=esc(parts[0])+'<span class="blank">___</span>'+esc(parts[1]||''');}else{document.getElementById('q-text').textContent=q.question;}document.getElementById('q-hint').textContent=q.hint||'';if(q.youtubeSearch){document.getElementById('yt-frame').src=buildYTSearchURL(q.youtubeSearch);show('video-wrap');}else{hide('video-wrap');}hide('answer-box');document.getElementById('btn-reveal').style.display='';document.getElementById('btn-next').style.display='none';document.getElementById('ingame-search-input').value='';}
+function revealAnswer(){const q=questions[currentIndex];if(currentMode==='fillBlanks'){const parts=q.lyric.split('___');document.getElementById('q-text').innerHTML=esc(parts[0])+'<span class="blank" style="color:#4caf50;border-color:#4caf50">'+q.blank+'</span>'+esc(parts[1]||'');document.getElementById('answer-main').textContent='ðµ '+q.song;document.getElementById('answer-sub').textContent='â '+q.artist;}else if(currentMode==='guessTune'){document.getElementById('answer-main').textContent='ðµ '+q.answer;document.getElementById('answer-sub').textContent='â '+q.artist;}else{document.getElementById('answer-main').textContent='ð¤ '+q.answer;document.getElementById('answer-sub').textContent=q.fact;}show('answer-box');document.getElementById('btn-reveal').style.display='none';document.getElementById('btn-next').style.display='';score++;document.getElementById('score').textContent=score;}
+function nextQuestion(){currentIndex++;if(currentIndex>=questions.length){endGame();}else{loadQuestion();}}
+function endGame(){stopVideo();hide('game-screen');show('end-screen');document.getElementById('end-msg').textContent='You got '+score+' out of '+questions.length+' â fantastic effort! ð';history.pushState({screen:'end'},'');}
+function show(id){document.getElementById(id).style.display='';}
+function hide(id){document.getElementById(id).style.display='none';}
+function stopVideo(){document.getElementById('yt-frame').src='';hide('video-wrap');}
+function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}return arr;}
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 </script>
 </body>
 </html>
